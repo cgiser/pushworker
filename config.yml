@@ -1,0 +1,18 @@
+---
+#broker: 'amqp://pro_push:a123456@192.168.1.134:5672/'
+broker: 'amqp://push:XziFf2p5Btjb@192.168.1.25:5672/'
+#broker: 'redis://localhost:6379'
+#broker: 'https://sqs.us-west-2.amazonaws.com/123456789012'
+default_queue: machinery_task
+
+#result_backend: 'amqp://pro_push:a123456@192.168.1.134:5672/'
+result_backend: 'amqp://push:XziFf2p5Btjb@192.168.1.25:5672/'
+#result_backend: 'memcache://localhost:11211'
+#result_backend: 'mongodb://localhost:27017'
+#results_expire_in: 3600000
+
+amqp:
+  binding_key: machinery_task
+  exchange: machinery_exchange
+  exchange_type: direct
+  prefetch_count: 3
