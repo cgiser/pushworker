@@ -81,6 +81,7 @@ type Offer struct {
 type Target struct {
 	CountryInclude []string `bson:"country_include"`
 	CountryExclude []string `bson:"country_exclude"`
+	User           *string  `bson:"user"`
 }
 
 type Campaign struct {
@@ -95,6 +96,10 @@ type Campaign struct {
 	Target     *Target   `bson:"target"`
 	Action     []*Action `bson:"action"`
 	Cpc        *float64  `json:"cpc"`
+}
+
+type GktUser struct {
+	Token *string `bson:"token"`
 }
 
 //"title" : "📢 Binabati kita !!",

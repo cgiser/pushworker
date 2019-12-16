@@ -1,19 +1,19 @@
 package task
 
 import (
-	"encoding/base64"
 	"fmt"
 	"github.com/SherClockHolmes/webpush-go"
 	"github.com/cgiser/pushworker/common"
 	"github.com/cgiser/pushworker/logging"
+	"gopkg.in/go-playground/pool.v3"
 )
 
-// Add ...
-func Push(args ...[]string) (string, error) {
+func Push(args []string) pool.WorkFunc {
+	return func(wu pool.WorkUnit) (interface{}, error) {
+		return sendMsg(args)
+	}
 
-	return sendMsg(args[0])
 }
-
 func sendMsg(user []string) (string, error) {
 	// Decode subscription
 	s := &webpush.Subscription{
@@ -23,8 +23,8 @@ func sendMsg(user []string) (string, error) {
 			Auth:   user[2],
 		},
 	}
-	x, _ := base64.StdEncoding.DecodeString(user[4])
-	fmt.Println(string(x))
+	//x, _ := base64.StdEncoding.DecodeString(user[4])
+	//fmt.Println(string(x))
 	if domain, ok := common.Domains[user[3]]; ok {
 		// Send Notification
 		res, err := webpush.SendNotification([]byte(user[4]), s, &webpush.Options{
@@ -42,9 +42,10 @@ func sendMsg(user []string) (string, error) {
 		//} else {
 		//	go metrics.SendFail(campaign.OfferId, campaignId)
 		//}
-
+		//fmt.Sprintf(fmt.Sprintf("send to user %s result:%s", user[5], res.Status))
 		return fmt.Sprintf("send to user %s result:%s", user[5], res.Status), nil // everything ok, send nil, error if not
 	} else {
+		//fmt.Sprintf(fmt.Sprintf("send to user %s fail:miss domain %s", user[5], user[3]))
 		return fmt.Sprintf("send to user %s fail:miss domain %s", user[5], user[3]), nil // everything ok, send nil, error if not
 	}
 	//msg := base64.StdEncoding.EncodeToString([]byte("1~2~30001"))
